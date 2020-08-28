@@ -24,8 +24,13 @@ class MotionCursorTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testMotionInfoのデコードテスト() throws {
+    func testMotionInfoのデコードテストAcc() throws {
         let testData = "{\"type\": \"\(MotionCursor.MOUSE_TYPE.NORMAL.rawValue)\", \"acc\": {\"x\": 20.0, \"y\": 32.1, \"z\":4.0}}".data(using: .utf8) ?? Data()
+        XCTAssertNoThrow(try decodeMouseInfo(data: testData))
+    }
+    
+    func testMotionInfoのデコードテストAtti() throws {
+        let testData = "{\"type\": \"\(MotionCursor.MOUSE_TYPE.NORMAL.rawValue)\", \"atti\": {\"pitch\": 20.0, \"yaw\": 32.1, \"roll\":4.0}}".data(using: .utf8) ?? Data()
         XCTAssertNoThrow(try decodeMouseInfo(data: testData))
     }
 
