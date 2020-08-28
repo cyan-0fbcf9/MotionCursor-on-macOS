@@ -9,7 +9,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     var notifyCharacteristic: CBCharacteristic? = nil
     var targetDescriptor: CBDescriptor? = nil
     let serviceUUID = [CBUUID(string: "d84315a7-3e95-4da6-8110-c28285cd8e2b")]
-    let notifyCharacreristicUUID = CBUUID(string: "c7e75734-e6ab-11ea-adc1-0242ac120002")
+    let motionInfoCharacteristicUUID = CBUUID(string: "c7e75734-e6ab-11ea-adc1-0242ac120002")
     let cccdUUID = CBUUID(string: CBUUIDClientCharacteristicConfigurationString)
     
     private var notifyCallback: ((Data) -> Void)? = nil
@@ -98,7 +98,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         print("found any characteristics")
         print("characteristic count:", service.characteristics!.count)
         for characreristic in service.characteristics!{
-            if characreristic.uuid == notifyCharacreristicUUID {
+            if characreristic.uuid == motionInfoCharacteristicUUID {
                 print("exist notify characteristic")
                 self.notifyCharacteristic = characreristic
                 self.targetPeripheral?.discoverDescriptors(for: characreristic)
