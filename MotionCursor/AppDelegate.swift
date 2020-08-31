@@ -32,13 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         constructMenu()
         
         // MARK: - Bluetooth Manager
-        bm = BluetoothManager(notifyCallback: { (data) -> Void in
-            do {
-                self.mouseManager.update(info: try decodeMouseInfo(data: data))
-            } catch {
-                print("mouse cursor was not updated")
-            }
-        })
+        bm = BluetoothManager(listener: self.mouseManager)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

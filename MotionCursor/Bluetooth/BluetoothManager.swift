@@ -1,22 +1,24 @@
 import Foundation
 import CoreBluetooth
 
-// MACはCentral（データを利用する側）です。一応クライアント？
-// スマホはPeripheral（データを渡す側）。一応サーバ？
+
+
 class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var cbCentralManager: CBCentralManager!
     var targetPeripheral: CBPeripheral? = nil
-    var notifyCharacteristic: CBCharacteristic? = nil
+    var mouseInfoCharacteristic: CBCharacteristic? = nil
+    var mouseActionCharacteristic: CBCharacteristic? = nil
     var targetDescriptor: CBDescriptor? = nil
     let serviceUUID = [CBUUID(string: "d84315a7-3e95-4da6-8110-c28285cd8e2b")]
-    let motionInfoCharacteristicUUID = CBUUID(string: "c7e75734-e6ab-11ea-adc1-0242ac120002")
+    let mouseInfoCharacteristicUUID = CBUUID(string: "c7e75734-e6ab-11ea-adc1-0242ac120002")
+    let mouseActionCharacteristicUUID = CBUUID(string: "b8a71aee-4e1c-4f4f-91da-4e10ce658cb0")
     let cccdUUID = CBUUID(string: CBUUIDClientCharacteristicConfigurationString)
     
-    private var notifyCallback: ((Data) -> Void)? = nil
+    var listener: BluetoothListener
     
-    init (notifyCallback: @escaping (Data) -> Void) {
+    init (listener: BluetoothListener) {
+        self.listener = listener
         super.init()
-        self.notifyCallback = notifyCallback
         cbCentralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
@@ -98,10 +100,20 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         print("found any characteristics")
         print("characteristic count:", service.characteristics!.count)
         for characreristic in service.characteristics!{
-            if characreristic.uuid == motionInfoCharacteristicUUID {
-                print("exist notify characteristic")
-                self.notifyCharacteristic = characreristic
+            switch characreristic.uuid {
+                
+            case mouseInfoCharacteristicUUID:
+                self.mouseInfoCharacteristic = characreristic
                 self.targetPeripheral?.discoverDescriptors(for: characreristic)
+                break
+                
+            case mouseActionCharacteristicUUID:
+                self.mouseActionCharacteristic = characreristic
+                self.targetPeripheral?.discoverDescriptors(for: characreristic)
+                break
+                
+            default:
+                break
             }
         }
         print("next, it try to discovering descriptors...")
@@ -113,8 +125,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         for descriptor in characteristic.descriptors ?? [] {
             if descriptor.uuid == cccdUUID {
                 print("exist cccd")
-                self.targetDescriptor = descriptor
-                self.setNotify()
+                self.setNotify(targetChara: characteristic)
             }
         }
     }
@@ -143,11 +154,25 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             return
         }
         
-        if let data = characteristic.value {
-//            print("Characteristic data:", String(data: data, encoding: .utf8) ?? "NONE")
-            self.notifyCallback?(data)
-        } else {
-            print("Characteristic data: NONE")
+        switch characteristic.uuid {
+        case mouseInfoCharacteristicUUID:
+            if let data = characteristic.value {
+                self.listener.notifyCursor(data: data)
+            } else {
+                print("Characteristic data: NONE")
+            }
+            break
+        
+        case mouseActionCharacteristicUUID:
+            if let data = characteristic.value {
+                self.listener.notifyAction(data: data)
+            } else {
+                print("Characteristic data: NONE")
+            }
+            break
+            
+        default:
+            break
         }
     }
 
@@ -161,9 +186,9 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         print("OK: Update enable notification state")
     }
     
-    func setNotify() {
-        if (self.notifyCharacteristic?.isNotifying == false) {
-            self.targetPeripheral?.setNotifyValue(true, for: notifyCharacteristic!)
+    func setNotify(targetChara: CBCharacteristic) {
+        if (targetChara.isNotifying == false) {
+            self.targetPeripheral?.setNotifyValue(true, for: targetChara)
         } else {
             print("the characteristic is already notifying");
         }

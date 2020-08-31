@@ -1,7 +1,7 @@
 import Foundation
 import Cocoa
 
-class MouseManager {
+class MouseManager: BluetoothListener {
     
     var bufferLocation: CGPoint!
     let displaySize: CGSize!
@@ -14,7 +14,7 @@ class MouseManager {
     }
     
     
-    func update(info: MouseInfo) {
+    private func update(info: MouseInfo) {
         if info.type == MOUSE_TYPE.NORMAL.rawValue {
             let addPoint = CGPoint(x: info.acc?.x ?? 0.0, y: -(info.acc?.y ?? 0.0))
             let point = self.computePosition(now: bufferLocation, add: addPoint)
@@ -40,7 +40,27 @@ class MouseManager {
     }
     
     
-    func computePosition(now: CGPoint, add: CGPoint) -> CGPoint {
+    private func action(action: MouseAction) {
+        switch action.type {
+        case .LEFT_CLICK:
+            switch action.action {
+            case .DOWN:
+                MouseEvent.leftClick()
+                break
+            case .UP:
+                break
+            case .MOVE:
+                break
+            }
+            break
+            
+        case .RIGHT_CLICK:
+            break
+        }
+    }
+    
+    
+    private func computePosition(now: CGPoint, add: CGPoint) -> CGPoint {
         var x = now.x + add.x
         var y = now.y + add.y
         if x < 0 {
@@ -56,5 +76,23 @@ class MouseManager {
             y = displaySize.height - 0.00390625
         }
         return CGPoint(x: x, y: y)
+    }
+    
+    // MARK: - Listener
+    
+    func notifyCursor(data: Data) {
+        do {
+            self.update(info: try decodeMouseInfo(data: data))
+        } catch {
+            print("mouse cursor was not updated")
+        }
+    }
+    
+    func notifyAction(data: Data) {
+        do {
+            self.action(action: try decodeMouseAction(data: data))
+        } catch {
+            print("mouse cursor was not actioned")
+        }
     }
 }
