@@ -51,7 +51,11 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     func scan() {
         if (!cbCentralManager.isScanning) {
             print("start scan")
-            cbCentralManager.scanForPeripherals(withServices: serviceUUID, options: nil)  // データを渡す周辺機器（ペリフェラル）を探索。見つかったらcentralManager(didDiscover)が呼び出される
+            self.targetPeripheral = nil
+            self.mouseInfoCharacteristic = nil
+            self.mouseActionCharacteristic = nil
+            self.targetDescriptor = nil
+            cbCentralManager.scanForPeripherals(withServices: serviceUUID, options: nil)
         } else {
             print("doing scan...")
         }
@@ -132,10 +136,12 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("Disconnect")
+        self.scan()
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("connection failed")
+        self.scan()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -146,6 +152,12 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
         
         print("write value", characteristic.value ?? "NULL")
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+        for service in invalidatedServices {
+            print("modify service - service UUID: \(service.uuid)")
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
