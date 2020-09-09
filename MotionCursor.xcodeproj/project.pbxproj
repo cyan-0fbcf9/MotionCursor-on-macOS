@@ -10,7 +10,7 @@
 		4F89528B24F53648000486D5 /* MouseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F89528A24F53648000486D5 /* MouseManager.swift */; };
 		4FC8F3B324FCCEAD0020D9AB /* MouseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8F3B224FCCEAD0020D9AB /* MouseAction.swift */; };
 		4FC8F3BA24FCD1C40020D9AB /* BluetoothListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8F3B924FCD1C40020D9AB /* BluetoothListener.swift */; };
-		4FC8F3BC24FCE7610020D9AB /* MouseCoreOperate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8F3BB24FCE7610020D9AB /* MouseCoreOperate.swift */; };
+		4FC8F3BC24FCE7610020D9AB /* MouseCoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8F3BB24FCE7610020D9AB /* MouseCoreOperation.swift */; };
 		4FC8F3C024FCEB040020D9AB /* ExNSEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8F3BF24FCEB040020D9AB /* ExNSEvent.swift */; };
 		4FE7CB7B24F4FE69002BE674 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE7CB7A24F4FE69002BE674 /* AppDelegate.swift */; };
 		4FE7CB7D24F4FE69002BE674 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE7CB7C24F4FE69002BE674 /* ViewController.swift */; };
@@ -44,7 +44,7 @@
 		4F89528A24F53648000486D5 /* MouseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseManager.swift; sourceTree = "<group>"; };
 		4FC8F3B224FCCEAD0020D9AB /* MouseAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseAction.swift; sourceTree = "<group>"; };
 		4FC8F3B924FCD1C40020D9AB /* BluetoothListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothListener.swift; sourceTree = "<group>"; };
-		4FC8F3BB24FCE7610020D9AB /* MouseCoreOperate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseCoreOperate.swift; sourceTree = "<group>"; };
+		4FC8F3BB24FCE7610020D9AB /* MouseCoreOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseCoreOperation.swift; sourceTree = "<group>"; };
 		4FC8F3BF24FCEB040020D9AB /* ExNSEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExNSEvent.swift; sourceTree = "<group>"; };
 		4FE7CB7724F4FE69002BE674 /* MotionCursor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MotionCursor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE7CB7A24F4FE69002BE674 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 			children = (
 				4FC8F3BD24FCE8600020D9AB /* Types */,
 				4F89528A24F53648000486D5 /* MouseManager.swift */,
-				4FC8F3BB24FCE7610020D9AB /* MouseCoreOperate.swift */,
+				4FC8F3BB24FCE7610020D9AB /* MouseCoreOperation.swift */,
 			);
 			path = Mouse;
 			sourceTree = "<group>";
@@ -318,7 +318,7 @@
 				4FC8F3B324FCCEAD0020D9AB /* MouseAction.swift in Sources */,
 				4FE7CB8024F4FE69002BE674 /* MotionCursor.xcdatamodeld in Sources */,
 				4FC8F3BA24FCD1C40020D9AB /* BluetoothListener.swift in Sources */,
-				4FC8F3BC24FCE7610020D9AB /* MouseCoreOperate.swift in Sources */,
+				4FC8F3BC24FCE7610020D9AB /* MouseCoreOperation.swift in Sources */,
 				4F89528B24F53648000486D5 /* MouseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -35,6 +35,21 @@ class MouseManager: BluetoothListener {
                                 mouseButton: CGMouseButton(rawValue: UInt32(3))!)
             guard let event = eventOpt else { return }
             event.post(tap: .cghidEventTap)
+        } else if info.type == MOUSE_TYPE.ThreeD_GAME.rawValue {
+            guard let atti = info.atti else { return }
+            let setPoint = CGPoint(x: CGFloat(atti.yaw) * (displaySize.width/2.0),
+                                   y: CGFloat(atti.pitch) * (displaySize.height/2.0) )
+            
+            let movePoint = CGPoint(x: displayCenter.x - (setPoint.x - bufferLocation.x),
+                                    y: displayCenter.y - (setPoint.y - bufferLocation.y))
+            
+            let eventOpt = CGEvent(mouseEventSource: nil,
+                                mouseType: CGEventType.mouseMoved,
+                                mouseCursorPosition: movePoint,
+                                mouseButton: CGMouseButton(rawValue: UInt32(3))!)
+            guard let event = eventOpt else { return }
+            event.post(tap: .cghidEventTap)
+            self.bufferLocation = setPoint
         }
 
     }
@@ -45,9 +60,10 @@ class MouseManager: BluetoothListener {
         case .LEFT_CLICK:
             switch action.action {
             case .DOWN:
-                MouseEvent.leftClick()
+                MouseEvent.leftDown()
                 break
             case .UP:
+                MouseEvent.leftUp()
                 break
             case .MOVE:
                 break

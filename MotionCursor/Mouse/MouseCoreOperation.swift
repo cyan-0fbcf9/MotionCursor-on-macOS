@@ -16,6 +16,7 @@ class MouseEvent {
                                mouseButton: .left)
         guard let event = eventOpt else { return }
         event.post(tap: .cghidEventTap)
+        print("DOWN")
     }
     
     static func leftUp() {
@@ -25,10 +26,16 @@ class MouseEvent {
                                mouseButton: .left)
         guard let event = eventOpt else { return }
         event.post(tap: .cghidEventTap)
+        print("UP")
     }
     
     static func leftClick() {
         MouseEvent.leftDown()
         MouseEvent.leftUp()
+    }
+    
+    static func doubleLeftClick() {
+        MouseEvent.leftClick()
+        MouseEvent.leftClick()
     }
 }
